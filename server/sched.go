@@ -543,7 +543,40 @@ func (s *Scheduler) load(req *LlmRequest, systemInfo ml.SystemInfo, gpus []ml.De
 			if requireFull && !explicitPartialGPUOffload(launchOpts, f) && len(s.loaded) > 0 && len(loadGpus) > 0 {
 				freeMemory, gpuFreeMemory, systemLimited := availableMemoryForPlacement(systemInfo, loadGpus, launchOpts)
 				// Use 80% of free memory as threshold to leave headroom.
-				if predictedForLoad > freeMemory*80/100 {
+				freeMemoryLimit := freeMemory * 80 / 100
+				modelFits := predictedForLoad <= freeMemoryLimit
+
+				// TriAttention auto-fit: if model doesn't fit and TriAttention is allowed,
+				// compute the minimum page budget that would allow the model to load.
+				if !modelFits && req.opts.TriAttentionPageBudget != 0 {
+					const kvFraction = 0.5
+					budget := req.opts.TriAttentionPageBudget
+					if budget == -1 {
+						// Auto: binary search for minimum budget (start at ctx/2, go lower)
+						budget = predictedCtx / 2
+						for budget > 64 {
+							est := llm.PredictServerVRAMWithTriAttention(predictedForLoad, budget, predictedCtx, kvFraction)
+							if est <= freeMemoryLimit {
+								break
+							}
+							budget = budget / 2
+						}
+					}
+					estWithBudget := llm.PredictServerVRAMWithTriAttention(predictedForLoad, budget, predictedCtx, kvFraction)
+					if estWithBudget <= freeMemoryLimit {
+						slog.Warn("model does not fit in VRAM without TriAttention page eviction; enabling automatically",
+							"required_vram", predictedForLoad,
+							"available_vram", freeMemoryLimit,
+							"page_budget", budget,
+							"estimated_vram_with_triattention", estWithBudget,
+						)
+						req.opts.TriAttentionPageBudget = budget
+						launchOpts.TriAttentionPageBudget = budget
+						modelFits = true // proceed with load
+					}
+				}
+
+				if !modelFits {
 					slog.Info("llama-server model predicted to exceed available memory, evicting",
 						"predicted", format.HumanBytes2(predictedForLoad),
 						"predicted_num_ctx", predictedCtx,

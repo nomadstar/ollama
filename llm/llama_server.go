@@ -379,6 +379,11 @@ func startLlamaServer(launch llamaServerLaunchConfig, out io.Writer) (cmd *exec.
 	}
 	// NumGPU == -1 (default): don't pass -ngl, let llama-server auto-detect
 
+	if launch.opts.TriAttentionPageBudget > 0 {
+		params = append(params, "--triattention-page-budget",
+			strconv.Itoa(launch.opts.TriAttentionPageBudget))
+	}
+
 	// Thread count — only pass if user explicitly set it.
 	// Default behavior: let llama-server auto-detect.
 	if launch.opts.NumThread > 0 {

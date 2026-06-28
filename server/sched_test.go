@@ -1354,6 +1354,7 @@ func TestSchedLlamaServerPredictionUsesTotalParallelContext(t *testing.T) {
 
 	scenario := newScenarioRequestWithContext(t, ctx, "parallel-context-model", 1*format.GigaByte, nil, nil, 65536)
 	scenario.req.opts.NumCtx = 32768
+	scenario.req.opts.TriAttentionPageBudget = 0
 
 	called := false
 	s.newServerFn = func(systemInfo ml.SystemInfo, gpus []ml.DeviceInfo, model string, f *ggml.GGML, adapters []string, projectors []string, opts api.Options, numParallel int, _ llm.LlamaServerConfig) (llm.LlamaServer, error) {

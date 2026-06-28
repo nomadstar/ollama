@@ -596,6 +596,8 @@ type Options struct {
 	PresencePenalty  float32  `json:"presence_penalty,omitempty"`
 	FrequencyPenalty float32  `json:"frequency_penalty,omitempty"`
 	Stop             []string `json:"stop,omitempty"`
+	// 0 = disabled, >0 = explicit page budget, -1 = auto (scheduler picks minimum to fit)
+	TriAttentionPageBudget int `json:"triattention_page_budget,omitempty"`
 }
 
 // Runner options which must be set when the model is loaded into memory
@@ -1094,16 +1096,17 @@ func DefaultOptions() Options {
 		NumPredict: -1,
 
 		// set a minimal num_keep to avoid issues on context shifts
-		NumKeep:          4,
-		Temperature:      0.8,
-		TopK:             40,
-		TopP:             0.9,
-		TypicalP:         1.0,
-		RepeatLastN:      64,
-		RepeatPenalty:    1.1,
-		PresencePenalty:  0.0,
-		FrequencyPenalty: 0.0,
-		Seed:             -1,
+		NumKeep:                4,
+		Temperature:            0.8,
+		TopK:                   40,
+		TopP:                   0.9,
+		TypicalP:               1.0,
+		RepeatLastN:            64,
+		RepeatPenalty:          1.1,
+		PresencePenalty:        0.0,
+		FrequencyPenalty:       0.0,
+		Seed:                   -1,
+		TriAttentionPageBudget: -1,
 
 		Runner: Runner{
 			// options set when the model is loaded
