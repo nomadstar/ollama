@@ -22,6 +22,34 @@ This repository has been supercharged with **TurboQuant CUDA support** for unpre
 
 ---
 
+## TriAttention — Automatic VRAM Fitting
+
+This fork integrates TriAttention page eviction from
+[llama-cpp-turboquant](https://github.com/nomadstar/llama-cpp-turboquant).
+When a model's weights fit in VRAM but the KV cache would push it over the limit,
+the scheduler automatically enables page eviction to make it fit.
+
+**API / Modelfile option:** `triattention_page_budget`
+
+| Value | Behavior |
+|---|---|
+| `-1` (default) | Auto: enable page eviction if needed to fit the model in VRAM, with a warning in logs |
+| `0` | Disabled: standard behavior, will OOM if KV cache doesn't fit |
+| `N > 0` | Explicit: always evict to keep at most N tokens of KV cache in physical pages |
+
+**Modelfile example:**
+```
+FROM llama3.1:8b
+PARAMETER triattention_page_budget 512
+```
+
+**API example:**
+```json
+{ "model": "llama3.1:8b", "options": { "triattention_page_budget": 512 } }
+```
+
+---
+
 ## 🧠✨ PagedAttention — KV Cache Paginado (TurboQuant v2) ✨🧠
 ### *The Puppy Edition* 🐕‍🦺
 
