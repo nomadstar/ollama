@@ -4,10 +4,10 @@
 
 | File | Change |
 |------|--------|
-| `llama/server/CMakeLists.txt:180` | FetchContent → `nomadstar/llama-cpp-turboquant` tag `feature/triattention` |
+| `llama/server/CMakeLists.txt:180` | FetchContent → `nomadstar/mallana` tag `master` |
 | `llm/server.go:118-121` | Default `kvCacheType` to `turbo3_0` when `OLLAMA_KV_CACHE_TYPE` empty |
 | `envconfig/config.go:317` | Updated default doc string |
-| `LLAMA_CPP_VERSION` | Point to turboquant fork |
+| `LLAMA_CPP_VERSION` | Point to Mallana (`master`) |
 | `llama/compat/llama-cpp-hooks.patch` | Adjusted `clip.cpp` hunks for turboquant line offsets |
 
 ## Build
@@ -59,7 +59,7 @@ lengths that previously OOM'd should now fit in 4GB.
 ## If Build Fails
 
 Most likely cause: the compat patch (`llama-cpp-hooks.patch`) doesn't match the
-turboquant fork. Rebuild from scratch:
+Mallana source. Rebuild from scratch:
 
 ```bash
 git clean -fdx llama/  # nuke cached llama.cpp
