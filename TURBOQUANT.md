@@ -69,12 +69,13 @@ cmake --build build -j$(nproc)
 
 ## Important Notes
 
-- The turboquant fork (`nomadstar/llama-cpp-turboquant`, branch
-  `feature/triattention`) is at
-  `https://github.com/nomadstar/llama-cpp-turboquant.git`
+- Mallana (`nomadstar/mallana`, formerly the `llama-cpp-turboquant` fork —
+  detached from the `atomicmilkshake/llama-cpp-turboquant` fork network,
+  branch `master`) is at
+  `https://github.com/nomadstar/mallana.git`
 - Ollama fetches it via CMake at build time — no submodule needed
 - The patch in `llama/compat/llama-cpp-hooks.patch` applies on top of
-  the turboquant fork, adding Ollama's monolithic-GGUF loading support
+  Mallana, adding Ollama's monolithic-GGUF loading support
 
 ## Known Issues & TODO
 
