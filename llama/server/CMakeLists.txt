@@ -178,12 +178,12 @@ set(LLAMA_CURL OFF CACHE BOOL "" FORCE)
 set(LLAMA_OPENSSL OFF CACHE BOOL "" FORCE)
 set(GGML_CUDA_GRAPHS ON CACHE BOOL "Enable CUDA graphs" FORCE)
 
-# Use the turboquant fork of llama.cpp for TurboQuant KV cache compression
-# https://github.com/nomadstar/llama-cpp-turboquant - main branch (PagedAttention + TriAttention)
+# Use Mallana (formerly the "llama-cpp-turboquant" fork) for TurboQuant KV cache compression
+# https://github.com/nomadstar/mallana - master branch (PagedAttention + TriAttention)
 FetchContent_Declare(
     llama_cpp
-    GIT_REPOSITORY "https://github.com/nomadstar/llama-cpp-turboquant.git"
-    GIT_TAG "main"
+    GIT_REPOSITORY "https://github.com/nomadstar/mallana.git"
+    GIT_TAG "master"
     GIT_SHALLOW TRUE
     ${_ollama_compat_patch_cmd}
 )

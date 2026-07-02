@@ -125,15 +125,15 @@ else()
             "$ENV{OLLAMA_LLAMA_CPP_SOURCE}" ABSOLUTE BASE_DIR "${CMAKE_SOURCE_DIR}")
         message(STATUS "Using local llama.cpp source: ${OLLAMA_LLAMA_CPP_SOURCE_DIR}")
         add_custom_target(ollama-llama-cpp-source)
-    elseif(EXISTS "${CMAKE_SOURCE_DIR}/../llama-cpp-turboquant")
+    elseif(EXISTS "${CMAKE_SOURCE_DIR}/../mallana")
         get_filename_component(OLLAMA_LLAMA_CPP_SOURCE_DIR
-            "${CMAKE_SOURCE_DIR}/../llama-cpp-turboquant" ABSOLUTE)
-        message(STATUS "Using local llama-cpp-turboquant source (fallback): ${OLLAMA_LLAMA_CPP_SOURCE_DIR}")
+            "${CMAKE_SOURCE_DIR}/../mallana" ABSOLUTE)
+        message(STATUS "Using local Mallana source (fallback): ${OLLAMA_LLAMA_CPP_SOURCE_DIR}")
         add_custom_target(ollama-llama-cpp-source)
     else()
         set(OLLAMA_LLAMA_CPP_SOURCE_DIR "${CMAKE_BINARY_DIR}/_deps/llama_cpp-src")
         ExternalProject_Add(ollama-llama-cpp-source
-            GIT_REPOSITORY "https://github.com/nomadstar/llama-cpp-turboquant.git"
+            GIT_REPOSITORY "https://github.com/nomadstar/mallana.git"
             GIT_TAG ${OLLAMA_LLAMA_CPP_GIT_TAG}
             GIT_SHALLOW TRUE
             SOURCE_DIR ${OLLAMA_LLAMA_CPP_SOURCE_DIR}
