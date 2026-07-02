@@ -90,8 +90,8 @@ prepare() {
   # Limpiar cualquier comentario en la versión que rompa cmake FetchContent
   sed -i 's/ .*//' LLAMA_CPP_VERSION
   # Corregir la URL del repositorio remoto en cmake/local.cmake
-  sed -i 's|https://github.com/ggml-org/llama.cpp.git|https://github.com/nomadstar/llama-cpp-turboquant.git|' cmake/local.cmake
-  # Eliminar parche y código fuente roto de laguna que no compila en turboquant
+  sed -i 's|https://github.com/ggml-org/llama.cpp.git|https://github.com/nomadstar/mallana.git|' cmake/local.cmake
+  # Eliminar parche y código fuente roto de laguna que no compila en Mallana
   rm -rf llama/compat/models
   
   # Eliminar flags no soportados por el fork antiguo
